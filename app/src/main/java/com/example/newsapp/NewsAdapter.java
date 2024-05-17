@@ -12,16 +12,10 @@ import java.util.List;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
 
-    private final List<NewsItem> newsItems;
-    private final OnItemClickListener onItemClickListener;
+    private List<NewsItem> newsList;
 
-    public interface OnItemClickListener {
-        void onItemClick(NewsItem newsItem);
-    }
-
-    public NewsAdapter(List<NewsItem> newsItems, OnItemClickListener onItemClickListener) {
-        this.newsItems = newsItems;
-        this.onItemClickListener = onItemClickListener;
+    public NewsAdapter(List<NewsItem> newsList) {
+        this.newsList = newsList;
     }
 
     @NonNull
@@ -33,33 +27,28 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
-        holder.bind(newsItems.get(position));
+        NewsItem newsItem = newsList.get(position);
+        holder.titleTextView.setText(newsItem.getTitle());
+        holder.descriptionTextView.setText(newsItem.getDescription());
+        Glide.with(holder.itemView.getContext()).load(newsItem.getImageUrl()).into(holder.newsImageView);
     }
 
     @Override
     public int getItemCount() {
-        return newsItems.size();
+        return newsList.size();
     }
 
-    class NewsViewHolder extends RecyclerView.ViewHolder {
-        private final ImageView newsImage;
-        private final TextView newsTitle;
+    public static class NewsViewHolder extends RecyclerView.ViewHolder {
+
+        TextView titleTextView;
+        TextView descriptionTextView;
+        ImageView newsImageView;
 
         public NewsViewHolder(@NonNull View itemView) {
             super(itemView);
-            newsImage = itemView.findViewById(R.id.news_image);
-            newsTitle = itemView.findViewById(R.id.news_title);
-
-            itemView.setOnClickListener(view -> {
-                if (onItemClickListener != null) {
-                    onItemClickListener.onItemClick(newsItems.get(getAdapterPosition()));
-                }
-            });
-        }
-
-        public void bind(NewsItem newsItem) {
-            Glide.with(itemView.getContext()).load(newsItem.getImageUrl()).into(newsImage);
-            newsTitle.setText(newsItem.getTitle());
+            titleTextView = itemView.findViewById(R.id.title_text_view);
+            descriptionTextView = itemView.findViewById(R.id.description_text_view);
+            newsImageView = itemView.findViewById(R.id.news_image_view);
         }
     }
 }

@@ -4,10 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class NewsItem implements Parcelable {
-
-    private final String title;
-    private final String description;
-    private final String imageUrl;
+    private String title;
+    private String description;
+    private String imageUrl;
 
     public NewsItem(String title, String description, String imageUrl) {
         this.title = title;
